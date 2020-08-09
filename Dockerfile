@@ -1,3 +1,15 @@
-FROM ubuntu:20.04
-COPY . ./app
-CMD ["bin/sh"]
+FROM php:7.4-fpm
+RUN apt-get update && apt-get install -y \
+        curl \
+        wget \
+        git \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libzip-dev \
+        libpq-dev \
+        libpng-dev \
+    && docker-php-ext-install -j$(nproc) pdo pdo_pgsql zip
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN mkdir /app
+COPY . /app
+RUN chmod -R 775 /app/var/cache
