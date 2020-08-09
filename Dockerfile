@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y \
         libzip-dev \
         libpq-dev \
         libpng-dev \
-    && docker-php-ext-install -j$(nproc) pdo pdo_pgsql zip
+    && docker-php-ext-install -j$(nproc) pdo pdo_pgsql zip \
+    && pecl install apcu \
+    && docker-php-ext-enable apcu
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN mkdir /app
 COPY . /app
